@@ -1,0 +1,188 @@
+Version History: (0.0 - 0.3 were created before introduction of version history, so many details are unknown)
+	0.0:
+		-Initial set-up of HTTP class and predicted methods.
+		
+		
+	0.1:
+		-Creation of HTTP_Message class.
+		
+		-HTTP_Message contains useful data fields to store lines of a standard message.
+			~All fields are strings.
+			
+		-Added many methods to HTTP_Message.
+			
+			
+	0.2:
+		-Creation of HTTPVersion and HTTPStatus enumerations as well as private class HeaderLine in
+			HTTP_Message.
+			
+		-Updated HTTP_Message data fields to be enumerations of HTTPVersion and HTTPStatus.
+		
+		-Added more methods to HTTP_Message and interpretMessage() to HTTP.
+			~As of now, interpretMessage() does nothing of any value apart from testing.
+		
+		
+	0.3:
+		-Renamed HTTP_Message class to Message.
+		
+		-Renamed HTTPVersion enum to Version.
+		
+		-Renamed HTTPStatus enum to Status.
+		
+		-Added NULL enumeration to Status.
+		
+		-Added classes HeaderLine, HeaderLineType, HeaderLineStatus, Message, and Method.
+			~Moved private class HeaderLine into it's own public class.
+			
+		-Changed type field in HeaderLine into a HeaderLineType enumeration.
+		
+		-Moved HeaderLine...-classes into their own package.
+		
+		-Moved Message-classes (including Version) into their own package.
+		
+		-Added methods in HTTP: getTimeGMT().
+		
+		
+	0.4:
+		-Moved Version into the main HTTP package.
+		
+		-Added headerLineFailure String field in Message.
+			~Describes the last failure with respect to adding a header line.
+			
+		-Added methods in Message: addHeaderLine(HeaderLine), addHeaderLine(HeaderLineType, String),
+			addHeaderLineFailure(HeaderLineType, String), and getHeaderLineFailure().
+				~addHeaderLineFailure(HeaderLineType, String) is a private check method.
+				~addHeaderLine(String) was updated to work with new methods.
+				
+		-Added DebugMode boolean field to HTTP which tracks whether or not to print out in-bound and out-bound
+			messages to the console.
+				~DebugMode is private.
+				~DebugMode has no access or mutate methods, meaning only the main method in the class can use
+					it.
+				~Debug functionality added to readMessage() and interpretMessage().
+				
+		-Added documentation on all classes and methods that didn't originally have any.
+		
+		-Updated existing documentation.
+		
+		-Removed NULL enumeration in Status.
+			~Was originally used in conjunction with HTTP's readMessage(), but it was obsolete soon after.
+		
+		-Updated methods in HTTP: readMessage().
+			~Now returns a boolean rather than a Status enumeration.
+		
+		-Added more HeaderLineType enumerations.
+			~AGE, LOCATION, PORXY_AUTH, RETRY_AFTER, VARY, and WWW_AUTH.
+		
+		
+	0.5:
+		-Added serverName static String field to HTTP.
+			~References the server and the current version.
+		
+		-Added methods in HTTP: hasEnded(), getMessageRead(), and getMessageSend().
+			~getMessageRead() and getMessageSend() return copies of the object, not the object itself.
+		
+		-Added more Method enumerations.
+			~CONNECT, OPTIONS, and TRACE.
+		
+		-Added directoryCharacter char field to HTTP.
+			~Is the character used to determine how to navigate a computer's directories.
+		
+		-Added isWindows final boolean field to HTTP.
+			~Will change directoryCharacter from '/' to '\' if true.
+		
+		-Added workingDirectory final String field to HTTP.
+			~Stores the current working directory of the server.
+			
+		-Modified methods in HTTP: readMessage() and interpretMessage().
+			~readMessage() can now accept request messages with data fields.
+			~interpretMessage() can now handle TRACE request messages.
+		
+		-Added class SessionEndedException.
+			~Replaces Exception thrown if an HTTP session has ended, but was referenced.
+		
+		-Updated documentation in HTTP's sendMessage() and sendMessage(String) to include encoding.
+		
+		-Updated documentation in HTTP's constructor to include new constants.
+		
+		-Added DebugMode functionality to sendMessage() and sendMessage(String) in HTTP.
+		
+		-Changed methods in Message: addHeaderLineFailure() and getNextHeaderLine().
+			~addHeaderLineFailure() now considers adding a duplicate header line to be illegal.
+			~getNextHeaderLine() now returns a copy of the header line at the header line iterator.
+		
+		-Added methods in Message: copyOf(Message).
+			~copyOf(Message) is a static method; it returns copies of given message objects.
+		
+		-Added methods in HeaderLine: getContents().
+		
+		
+	0.6:
+		-Added methods in HTTP: setNot_Found_HTML(File), getTimeLastModified(File),  
+			getTimeLastModified(String), and makeNotFound(Scanner).
+				~Both getTimeLastModified()s do the same thing, but getTimeLastModified(File) is more 
+				recommended.
+				~makeNotFound(Scanner) is private.
+		
+		-Added Not_Found_HTML File field in HTTP.
+			~Contains the file to send when a file can't be found. Is null by default.
+		
+		-Added usingDefaultNot_Found_HTML boolean field to HTTP.
+			~Tells whether or not the default Not_Found_HTML is to be used.
+		
+		-Removed directoryCharacter char field and isWindows boolean field in HTTP.
+			~Was made obsolete by how File's constructor accepts Strings.
+		
+		-Added classes into package HTTP: DefaultHTMLs.
+			~Contains useful HTML files for default error messages.
+		
+		-Updated methods in HTTP: constructor and interpretMessage().
+			~Removed directoryCharacter and isWindows in constructor and added HTML defaults.
+			~Extreme changes to interpretMessage(), now actually can partially handle messages by itself.
+		
+		-Updated documentation in HTTP: constructor.
+			~Now mentions that the Not_Found_HTML was given a default file.
+			~Removed mention of a directoryCharacter and isWindows.
+		
+		
+	0.7:
+		-Added acceptedAnswers String field in HeaderLineType.
+			~Labels accepted answers for the given enumeration (blank means any answers are accepted).
+			~Updated many of the enumerations to include special answers.
+		
+		-Added methods in HeaderLineType: getAcceptableAnswers().
+			~Gets the acceptedAnswers String field.
+		
+		-Added methods in HeaderLine: isLegalAnswer(), isLegalAnswer(HeaderLineType, String), and main.
+			~isLegalAnswer(HeaderLineType, String) is static.
+			~Both isLegalAnswer()s check for legal answers for a header line.
+		
+		-Updated methods in Message: addHeaderLineFailure(HeaderLineType, String)
+			~Now has third argument of a String object to represent the contents of the header line.
+			~Checks for legal answers now.
+		
+		-Added enumerations in Status: PRECON_FAIL, SERV_UNAVAIL.
+			~PRECON_FAIL is sent if the "If-Match" header line fails.
+			~SERV_UNAVAIL is sent if the service is unavailable; should always be paired with Retry-After
+				header line.
+		
+		-Added enumeration in DefaultHTMLs: PRECON_FAIL.
+			~To be used in a future update.
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+			
